@@ -3,7 +3,7 @@ from typing import List, Dict, Tuple, Union, Optional, Any, NoReturn
 
 import pygame
 
-from constant import Constant
+from constant import Constant, ColorEnum
 from config import Config
 
 constant = Constant()
@@ -20,7 +20,7 @@ def init_all_objects():
     return objects
 
 def frame_logic(objects: Dict):
-    objects['game_name'] = objects['font'].render(constant.name, True, constant.white)
+    objects['game_name'] = objects['font'].render(constant.name, True, ColorEnum.white)
     
     w, h = config.screen_size
 
@@ -30,7 +30,7 @@ def frame_logic(objects: Dict):
     if objects['ball_rect'].top < 0 or objects['ball_rect'].bottom > h:
         config.ball_speed[1] = -config.ball_speed[1]
     
-    objects['screen'].fill(constant.black)
+    objects['screen'].fill(ColorEnum.black)
     objects['screen'].blit(objects['game_name'], (w/2, h/2))
     objects['screen'].blit(objects['ball'], objects['ball_rect'])
 
