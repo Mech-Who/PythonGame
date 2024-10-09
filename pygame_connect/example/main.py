@@ -3,60 +3,55 @@
 - https://blog.csdn.net/cxhold/article/details/139853348
 - https://blog.csdn.net/cxhold/article/details/139859422
 """
-import pygame
+import os
 import sys
-from pygame.locals import *
 import time
+import random
 import traceback
-import os,random
 
+import pygame
+from pygame.locals import *
+import numpy as np
 
 def main():
-    pygame.init()
-    game_size = width,height = 700,500
-    bg_color = (255,255,255)  #白色底
-    game_cols = 6
-    game_rows = 6
-    imgs_repeat =  game_cols * game_rows / 4
-    cell_size = 40
-    
-    small_imgs = []    #新增
-    
-    cur_game = []    #游戏, 新增
-    tmp_game = []    #临时游戏内容, 新增
-    mid_game = []    #中间游戏, 新增
+    pygame.init() # pygame初始化
 
-    EMPTYCELL = -1   #新增
+    game_size = width, height = 700, 500 # 游戏窗口尺寸
+    bg_color = (255,255,255)  # 白色底
+    game_cols = 6 # 多少列方块
+    game_rows = 6 # 多少行方块
+    repeat_times = 4 # 一个图片最多可以出现4次
+    imgs_repeat =  game_cols * game_rows / repeat_times # 有多少个图片需要重复
+    cell_size = 40 # 方块的尺寸
+    
+    small_imgs = []    # 新增
+    
+    cur_game = []    # 游戏, 新增
+
+    EMPTYCELL = -1   # 新增
 
     '''
     分割小图标
     '''
     def splitImg():
-        llk_base = pygame.image.load("imgs\\llk.png")  #图片加载成功后，pygame将图片转换为一个Surface对象
+        llk_base = pygame.image.load(r"pygame_connect/example/imgs/llk.png")  #图片加载成功后，pygame将图片转换为一个Surface对象
         for i in range(0, int(imgs_repeat)):
             i_left = i * cell_size
-            small_imgs.append(llk_base.subsurface(i_left,0,cell_size,cell_size))
+            sub_surface = llk_base.subsurface(i_left, 0, cell_size, cell_size)
+            small_imgs.append(sub_surface)
 
     '''
     初始化游戏
     '''
     def initGame():
-        for i in range(0, int(imgs_repeat)):
-            for j in range(0, 4):
-                tmp_game.append(i)
-
-        total = game_cols * game_rows
-        for x in range(0, total):
-            index = random.randint(0, total - x - 1)
-            mid_game.append(tmp_game[index])
-            del tmp_game[index]
-
-        # 一维转为二维，y为高
-        for y in range(0, game_rows):
-            for x in range(0, game_cols):
-                if x == 0:
-                    cur_game.append([])
-                cur_game[y].append(mid_game[x + y * game_rows])
+        nonlocal cur_game
+        # 将需要的图放在一个列表 cur_game 中
+        cur_game = list(range(int(imgs_repeat))) * repeat_times
+        # 随机打乱该列表
+        random.shuffle(cur_game)
+        # 将该列表转换为2维数组
+        cur_game = np.array(cur_game).reshape(game_cols, game_rows)
+        cur_game = cur_game.tolist()
 
     pygame.display.set_caption('Hi,连连看！')
 
