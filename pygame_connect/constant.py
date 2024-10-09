@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, unique
 from dataclasses import dataclass
 from typing import List, Dict, Tuple, Union, Optional, Any, NoReturn
 
@@ -13,6 +13,7 @@ class Constant:
     black: Color= (0, 0, 0)
     white: Color= (255, 255, 255)
 
+@unique
 class ColorEnum(Enum):
     white: Color = (255, 255, 255)
     black: Color= (0, 0, 0)
